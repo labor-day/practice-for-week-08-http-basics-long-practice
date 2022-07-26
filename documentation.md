@@ -5,14 +5,33 @@
 #### Step 1
 Predicted Request components:
 - Method: GET
-- URL: /
-- Headers: none
+- URL: http://localhost:5000/
+- Headers:
+      Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+      Accept-Encoding: gzip, deflate, br
+      Accept-Language: en-US,en;q=0.9
+      Connection: keep-alive
+      Host: localhost:5000
+      Sec-Fetch-Dest: document
+      Sec-Fetch-Mode: navigate
+      Sec-Fetch-Site: none
+      Sec-Fetch-User: ?1
+      Upgrade-Insecure-Requests: 1
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+      sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"
+      sec-ch-ua-mobile: ?0
+      sec-ch-ua-platform: "Windows"
 - Body: none
 
 Predicted Response components:
 - Status Code: 200
 - Headers:
-  - Content-Type: text/html
+      X-Powered-By: Express
+      Content-Type: text/html; charset=utf-8
+      Content-Length: 826
+      Date: Tue, 26 Jul 2022 22:38:43 GMT
+      Connection: keep-alive
+      Keep-Alive: timeout=5
 - Body: HTML page with navigation links to other pages
 
 #### Step 2
@@ -27,35 +46,35 @@ website. Move on to the next request/response documentation.
 
 * Note
     - Headers contain many keys, but for this exercise focus on **Content-Type** and **Location**.
- 
+
 =============================================
 =============================================
 
 ### Ask for a page that doesn't exist
 
 Request components:
-- Method:
-- URL:
-- Headers:
-- Body:
+- Method: GET
+- URL: http://localhost:5000/dogs
+- Headers: same as above
+- Body: same as above
 
 Response components:
-- Status code:
-- Headers: 
-- Body:
+- Status code: 404
+- Headers: same as above
+- Body: HTML page saying 404 page not found
 
 ### Ask for the products list page
 
 Request components:
-- Method:
-- URL:
-- Headers:
-- Body:
+- Method: GET
+- URL: /products
+- Headers: same as above
+- Body: same as above
 
 Response components:
-- Status code: 
-- Headers:
-- Body: 
+- Status code: 200
+- Headers: same as above
+- Body: HTML page with the only product
 
 ### Ask for the product detail page
 
@@ -70,28 +89,28 @@ Here's an example product on the server:
 | categories  | "beauty", "electronics"                                    |
 
 Request components:
-- Method:
-- URL: 
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /products/1
+- Headers:
+- Body:
 
 Response components:
-- Status code: 
+- Status code: 200
 - Headers:
-- Body: 
+- Body: html page for the product
 
 ### Ask for the create new product page
 
 Request components:
-- Method:
-- URL:
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /products/new
+- Headers:
+- Body:
 
 Response components:
-- Status code: 
-- Headers: 
-- Body: 
+- Status code: 200
+- Headers:
+- Body: html page to create a product
 
 ### Submit a new product
 
@@ -113,62 +132,71 @@ Here are the categories on the server:
 | furniture   | Furniture      |
 | clothing    | Clothing       |
 
-* Note: In Chome dev tools, if the "body" of a request exists, it will appear 
+* Note: In Chome dev tools, if the "body" of a request exists, it will appear
 in the network tab as "payload".
 
 Request components:
-- Method: 
-- URL: 
-- Headers: 
-- Body: 
+- Method: POST
+- URL: /products
+- Headers:
+      Content-Type: application/x-www-form-urlencoded
+      Referer: http://localhost:5000/products/new
+- Body:
+      name=New+Item+1&description=This+is+the+first+new+item&price=10.99&categories=electronics
 
 Response components:
-- Status code: 
+- Status code: 302
 - Headers:
-- Body: 
+      Location: /products/2
+- Body: html page of the product
 
 ### Ask for the edit product page
 
 Request components:
-- Method: 
-- URL: 
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /products/2/edit
+- Headers:
+- Body:
 
 Response components:
-- Status code:
-- Headers: 
-- Body:
+- Status code: 200
+- Headers:
+- Body: html page to edit product
 
 ### Submit an edit for an existing product
 
 After successful submission, user should be looking at the product detail page.
 
 Request components:
-- Method:
-- URL:
-- Headers: 
-- Body: 
+- Method: POST -> GET
+- URL: /products/2 -> /products/2
+- Headers:
+      Content-Type: application/x-www-form-urlencoded
+      Referer: http://localhost:5000/products/new
+- Body:
+      name=New+Item+1&description=This+is+the+first+new+item&price=12.99&categories=electronics
 
 Response components:
-- Status code: 
+- Status code: 302 -> 200
 - Headers:
-- Body: 
+      Location: /products/2
+- Body: html page of the product
 
 ### Submit a delete for an existing product
 
 After successful submission, user should be looking at the products list page.
 
 Request components:
-- Method: 
-- URL:
-- Headers: 
-- Body: 
+- Method: POST -> GET
+- URL: /products/2/delete -> /products
+- Headers:
+- Body:
 
 Response components:
-- Status code: 
+- Status code: 302 -> 200
 - Headers:
-- Body: 
+      Location: /products
+- Body: html page for all products
 
 ### Submit a new review for a product
 
@@ -184,42 +212,51 @@ Here's an example review on the server:
 | productId  | 1                      |
 
 Request components:
-- Method: 
-- URL: 
+- Method: POST -> GET
+- URL: /products/1/reviews
 - Headers:
+      Content-Type: application/x-www-form-urlencoded
+      Referer: http://localhost:5000/products/1
 - Body:
+  comment=I+hate+this+product%21&starRating=1
 
 Response components:
-- Status code: 
-- Headers: 
-- Body: 
+- Status code: 302 -> 200
+- Headers:
+      location: products/1
+- Body: product page
 
 ### Ask for the edit review page for a product
 
 Request components:
-- Method: 
-- URL: 
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /reviews/1/edit
+- Headers:
+      Referer: http://localhost:5000/products/1
+- Body:
 
 Response components:
-- Status code: 
+- Status code: 200
 - Headers:
-- Body: 
+- Body: html page for the review edit
 
 ### Submit an edit for an existing review
 
 After successful submission, user should be looking at the product detail page.
 
 Request components:
-- Method: 
-- URL: 
+- Method: POST -> GET
+- URL: /reviews/1
 - Headers:
-- Body: 
+      Content-Type: application/x-www-form-urlencoded
+      Referer: http://localhost:5000/reviews/1/edit
+- Body:
+    comment=I+love+this+product%21&starRating=4
 
 Response components:
-- Status code: 
-- Headers: 
+- Status code: 302 -> 200
+- Headers:
+    location: products/1
 - Body:
 
 ### Submit a delete for an existing review
@@ -227,40 +264,43 @@ Response components:
 After successful submission, user should be looking at the product detail page.
 
 Request components:
-- Method:
-- URL: 
-- Headers: 
-- Body: 
+- Method: POST -> GET
+- URL: /reviews/2/delete -> /products/1
+- Headers:
+     Content-Type: application/x-www-form-urlencoded
+     Referer: http://localhost:5000/products/1
+- Body:
 
 Response components:
-- Status code: 
-- Headers: 
-- Body: 
+- Status code: 302 -> 200
+- Headers:
+      Location: /products/1
+- Body: html page for current product
 
 ### Ask for all the products in a particular category by tag of the category
 
 Request components:
-- Method: 
-- URL: 
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /categories/beauty/products
+- Headers:
+- Body:
 
 Response components:
-- Status code: 
+- Status code: 302
 - Headers:
-- Body: 
+- Body: page with items in the beauty category
 
 ### Ask for the best-selling product
 
 Look for clues in the HTML pages from the prior responses for what the route should be.
 
 Request components:
-- Method: 
-- URL: 
-- Headers: 
-- Body: 
+- Method: GET
+- URL: /products/best-selling
+- Headers:
+- Body:
 
 Response components:
-- Status code: 
+- Status code: 200
 - Headers:
-- Body: 
+- Body:
